@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.clients.TransactionClient;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.TransactionDTO;
 import com.example.demo.exceptions.AccountNotFound;
@@ -17,8 +17,11 @@ import com.example.demo.repository.AccountRepository;
 public class AccountServiceImpl implements AccountService {
 	@Autowired
 	AccountRepository repo;
+//	@Autowired
+//	RestTemplate restTemplate;
+	
 	@Autowired
-	RestTemplate restTemplate;
+	TransactionClient client;
 
 	@Override
 	public String createAccount(Account account) {
@@ -62,8 +65,9 @@ public class AccountServiceImpl implements AccountService {
 			transaction.setTimeOfTransaction(LocalDate.now());
 			transaction.setTransactionType("withdraw");
 			transaction.setUpdatedBalance(newBalance);
-			String response = restTemplate.postForObject("http://localhost:8082/transactions/save", transaction,
-					String.class);
+//			String response = restTemplate.postForObject("http://localhost:8082/transactions/save", transaction,
+//					String.class);
+			String response  =client.saveTransaction(transaction);
 			System.out.println("....." + response);
 			return newBalance;
 		} else
@@ -82,8 +86,9 @@ public class AccountServiceImpl implements AccountService {
 		transaction.setTimeOfTransaction(LocalDate.now());
 		transaction.setTransactionType("deposit");
 		transaction.setUpdatedBalance(newBalance);
-		String response = restTemplate.postForObject("http://localhost:8082/transactions/save", transaction,
-				String.class);
+//		String response = restTemplate.postForObject("http://localhost:8082/transactions/save", transaction,
+//				String.class);
+		String response  =client.saveTransaction(transaction);
 		System.out.println("....." + response);
 
 		return newBalance;
