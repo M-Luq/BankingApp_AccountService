@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionDTO {
-//	private int transactionId;
+	private int transactionId;
 	private String transactionType;
 	private LocalDate timeOfTransaction;
 	private double updatedBalance;

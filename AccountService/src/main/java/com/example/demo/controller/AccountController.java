@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.clients.TransactionClient;
 import com.example.demo.entity.Account;
+import com.example.demo.entity.TransactionDTO;
 import com.example.demo.exceptions.AccountNotFound;
 import com.example.demo.exceptions.InsufficientBalance;
 import com.example.demo.service.AccountService;
@@ -20,6 +24,9 @@ import com.example.demo.service.AccountService;
 public class AccountController {
 	@Autowired
 	AccountService service;
+	
+	@Autowired
+	TransactionClient client;
 
 	@PostMapping("/create")
 	public String saveAccount(@RequestBody Account account) {
@@ -60,4 +67,10 @@ public class AccountController {
 			@PathVariable("amountToTransfer") double amountToTransfer) throws AccountNotFound, InsufficientBalance {
 		return service.fundTransfer(fromAccNo, toAccNo, amountToTransfer);
 	}
+	
+	@GetMapping("getAll/{id}")
+	public List<TransactionDTO> getAllTransactions(@PathVariable int id){
+		return client.getAllTransaction(id);
+	}
+	
 }
